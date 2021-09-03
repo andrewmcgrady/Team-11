@@ -28,6 +28,7 @@ from math import *
 import random
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 nav_features  = [[10.0, 10.0], [80.0, 90.0], [20.0, 70.0], [90.0, 20.0]]
 domain_size = 100.0
@@ -136,6 +137,7 @@ for t in range(1, num_iterations + 1):
     ''' Use the variable p for the collection of particles.  It should be a list of "robot" objects. 
         Note that the variable p was originally used for this collection of particles when they were initially 
         defined. '''
+        
     p_move_args = move_args
     for j in range(len(p)) :
         p[j].move(*p_move_args)
@@ -154,20 +156,40 @@ for t in range(1, num_iterations + 1):
           - The compute_prob() function does this for you '''
     a = []
     a = compute_prob(d)
-    
+
     ''' Resample new population of particles from current population 
           - When finished, the new population should be a list of "robot" objects in the variable p 
           - You may use the numpy package here, in particular, the np.cumsum() function if you find it convenient.
           - Be careful of aliasing '''
-   # probability_denominator = sum(range(len(p))
-    #p_rank = p.sort()
-    #for x in range(len(p_rank)):
-     #   p_rank[x]/probability_denominator
-        
-          
-           
-    # put your code here
+    cum_prob_p = np.cumsum(a)
+    #figure out how to iterate through the index of an array
+    binary_list=[]
     
+    rand = []
+    for i in range(len(cum_prob_p)):
+        cum_prob_p[i] = np.random.random()
+        rand.append(cum_prob_p[i])
+
+    for i in range(len(cum_prob_p)) and range(len(rand)):
+        if cum_prob_p[i-1] < rand[i]:
+            if rand[i] <= cum_prob_p[i]:
+                binary_list.append(1)
+            else:
+                binary_list.append(0)
+        else:
+            binary_list.append(0)
+            
+    for j in range(len(binary_list)) or range(len(p)):
+        if p[j] != 1:
+            if binary_list[j]!= 1:
+                del p[j]
+                p += [robot(*noise_args)for i in range(1)]
+            else:
+                pass
+        else:
+            pass
+    
+      
     ''' Print iteration number and plot robot and particles '''
-    #print('\nIteration %d' % (t,))
-    #plot_domain(t, myrobot, p)
+    print('\nIteration %d' % (t,))
+    plot_domain(t, myrobot, p)
