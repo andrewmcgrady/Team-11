@@ -164,32 +164,29 @@ for t in range(1, num_iterations + 1):
     cum_prob_p = np.cumsum(a)
     #figure out how to iterate through the index of an array
     binary_list=[]
+    p_new = []
+    rand = np.random.random_sample(size = 2000)
+    #rand_cum_prob_p = []
+    #rand_cum_prob_p = cum_prob_p
+    #for i in range(len(rand_cum_prob_p)):
+     #   rand = rand_cum_prob_p[i]
+      #  for i in range(len(rand)):
+       #     rand[i] = np.random.random()
+        
     
-    rand = []
-    for i in range(len(cum_prob_p)):
-        cum_prob_p[i] = np.random.random()
-        rand.append(cum_prob_p[i])
-
-    for i in range(len(cum_prob_p)) and range(len(rand)):
-        if cum_prob_p[i-1] < rand[i]:
-            if rand[i] <= cum_prob_p[i]:
-                binary_list.append(1)
-            else:
-                binary_list.append(0)
-        else:
-            binary_list.append(0)
-            
-    for j in range(len(binary_list)) or range(len(p)):
-        if p[j] != 1:
-            if binary_list[j]!= 1:
-                del p[j]
-                p += [robot(*noise_args)for i in range(1)]
+    for j in range(len(rand)):
+        for i in range(len(cum_prob_p)):
+            if cum_prob_p[i-1] < rand[j]:
+                if rand[j] <= cum_prob_p[i]:
+                        p_new.append(p[i].copy())
+                else:
+                    pass
             else:
                 pass
-        else:
-            pass
-    
-      
+    p = p_new
+
+    #based upon 2000 urvs use each one to pick do not repopulate, we want 2000 particles multiple copies of good particles
+      #use one random variable for all cum_prob,the ones that do the best will be copied more p[].copy
     ''' Print iteration number and plot robot and particles '''
     print('\nIteration %d' % (t,))
     plot_domain(t, myrobot, p)
